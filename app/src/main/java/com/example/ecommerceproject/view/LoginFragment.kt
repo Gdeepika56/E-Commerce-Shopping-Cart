@@ -6,18 +6,17 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.Fragment
-import com.example.ecommerceproject.model.remote.ApiClient
-import com.example.ecommerceproject.model.remote.ApiService
+import androidx.fragment.app.viewModels
 import com.example.ecommerceproject.R
 import com.example.ecommerceproject.databinding.FragmentLoginBinding
-import com.example.ecommerceproject.model.LoginRequest
-import com.example.ecommerceproject.model.LoginResponse
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
+import com.example.ecommerceproject.model.remote.AuthRepository
+import com.example.ecommerceproject.viewmodel.AuthViewModel
+import com.example.ecommerceproject.viewmodel.AuthViewModelFactory
+
 
 class LoginFragment: Fragment() {
      lateinit var binding: FragmentLoginBinding
+     private val authViewModel: AuthViewModel by viewModels { AuthViewModelFactory(AuthRepository())  }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -39,11 +38,23 @@ class LoginFragment: Fragment() {
                 if(email.isEmpty() || password.isEmpty()) {
                     Toast.makeText(requireContext(), "Please enter all fields", Toast.LENGTH_SHORT).show()
                 }else{
-                    loginUser(email,password)
+                    authViewModel.loginUser(email,password)
                 }
 
                 binding.tvEmail.text = ""
                 binding.tvPassword.text = ""
+            }
+        }
+
+        authViewModel.loginResponse.observe(viewLifecycleOwner) { response ->
+            if(response.isSuccessful && response.body()?.status == 0) {
+                Toast.makeText(requireContext(), "Login Successful!", Toast.LENGTH_SHORT).show()
+                parentFragmentManager.beginTransaction()
+                    .hide(this@LoginFragment)
+                    .replace(R.id.fragment_container,CategoryFragment())
+                    .commit()
+            }else{
+                Toast.makeText(requireContext(), response.body()?.message ?: "Login Failed", Toast.LENGTH_SHORT).show()
             }
 
         }
@@ -55,41 +66,5 @@ class LoginFragment: Fragment() {
                 .addToBackStack(null)
                 .commit()
         }
-    }
-
-    private fun loginUser(email: String, password: String) {
-        val loginRequest = LoginRequest(email, password)
-
-        val apiService: ApiService = ApiClient.retrofit.create(ApiService::class.java)
-
-        val call = apiService.loginUser(loginRequest)
-        call.enqueue(object : Callback<LoginResponse> {
-            override fun onResponse(call: Call<LoginResponse>, response: Response<LoginResponse>) {
-                if(!response.isSuccessful) {
-                    Toast.makeText(requireContext(), "Login Failed. Try again!", Toast.LENGTH_SHORT).show()
-                    return
-                }
-
-                val result = response.body()
-                if(result?.status == 0) {
-                    Toast.makeText(requireContext(), "Login Successful!", Toast.LENGTH_SHORT).show()
-
-
-                    parentFragmentManager.beginTransaction()
-                        .hide(this@LoginFragment)
-                        .replace(R.id.fragment_container, CategoryFragment())
-                        .commit()
-                }else{
-                    Toast.makeText(requireContext(),result?.message ?: "Unknown Error.", Toast.LENGTH_SHORT).show()
-                }
-            }
-
-            override fun onFailure(call: Call<LoginResponse>, t: Throwable) {
-                t.printStackTrace()
-                Toast.makeText(requireContext(), "Network Error!", Toast.LENGTH_SHORT).show()
-            }
-
-        })
-
     }
 }

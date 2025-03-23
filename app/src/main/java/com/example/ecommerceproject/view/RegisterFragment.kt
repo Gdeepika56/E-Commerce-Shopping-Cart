@@ -6,18 +6,23 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
 import com.example.ecommerceproject.model.remote.ApiClient
 import com.example.ecommerceproject.model.remote.ApiService
 import com.example.ecommerceproject.R
 import com.example.ecommerceproject.databinding.FragmentRegisterBinding
 import com.example.ecommerceproject.model.RegisterRequest
 import com.example.ecommerceproject.model.RegisterResponse
+import com.example.ecommerceproject.model.remote.AuthRepository
+import com.example.ecommerceproject.viewmodel.AuthViewModel
+import com.example.ecommerceproject.viewmodel.AuthViewModelFactory
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
 class RegisterFragment: Fragment() {
     lateinit var binding: FragmentRegisterBinding
+    private val authViewModel: AuthViewModel by viewModels { AuthViewModelFactory(AuthRepository())  }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -41,8 +46,16 @@ class RegisterFragment: Fragment() {
                 if(fullName.isEmpty() || mobile.isEmpty() || email.isEmpty() || password.isEmpty()) {
                     Toast.makeText(requireContext(), "Please enter all fields", Toast.LENGTH_SHORT).show()
                 }else{
-                    registerUser(fullName,mobile,email,password)
+                    authViewModel.registerUser(fullName,mobile,email,password)
                 }
+            }
+        }
+
+        authViewModel.registerResponse.observe(viewLifecycleOwner) {response ->
+            if(response.isSuccessful && response.body()?.status==0) {
+                Toast.makeText(requireContext(), "Registration Successful!", Toast.LENGTH_SHORT).show()
+            }else{
+                Toast.makeText(requireContext(), "Registration Falied", Toast.LENGTH_SHORT).show()
             }
         }
 
@@ -53,39 +66,5 @@ class RegisterFragment: Fragment() {
                 .addToBackStack(null)
                 .commit()
         }
-    }
-
-    private fun registerUser(fullName: String, mobile: String, email: String, password: String) {
-        val registerRequest = RegisterRequest(fullName, mobile,email,password)
-        val apiService: ApiService = ApiClient.retrofit.create(ApiService::class.java)
-
-        val call = apiService.registerUser(registerRequest)
-        call.enqueue(object: Callback<RegisterResponse> {
-            override fun onResponse(
-                call: Call<RegisterResponse>,
-                response: Response<RegisterResponse>
-            ) {
-                if(!response.isSuccessful){
-                    Toast.makeText(requireContext(),"Registration Failed. Try Again", Toast.LENGTH_SHORT).show()
-                    return
-                }
-
-                val result = response.body()
-                if (result?.status == 0) {
-                    Toast.makeText(requireContext(), "Registration Successful!", Toast.LENGTH_SHORT).show()
-
-                    parentFragmentManager.beginTransaction()
-                        .replace(R.id.fragment_container, LoginFragment())
-                        .commit()
-                } else {
-                    Toast.makeText(requireContext(), result?.message ?: "Unknown Error.", Toast.LENGTH_SHORT).show()
-                }
-            }
-
-            override fun onFailure(call: Call<RegisterResponse>, t: Throwable) {
-                t.printStackTrace()
-                Toast.makeText(requireContext(), "Network Error!", Toast.LENGTH_SHORT).show()
-            }
-        })
     }
 }
