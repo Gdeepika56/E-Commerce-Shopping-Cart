@@ -9,14 +9,8 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.GridLayoutManager
 import com.example.ecommerceproject.Adapters.CategoryAdapter
-import com.example.ecommerceproject.model.remote.ApiClient
-import com.example.ecommerceproject.model.remote.ApiService
 import com.example.ecommerceproject.databinding.FragmentCategoryBinding
-import com.example.ecommerceproject.model.CategoryResponse
 import com.example.ecommerceproject.viewmodel.CategoryViewModel
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
 
 class CategoryFragment: Fragment() {
     lateinit var binding: FragmentCategoryBinding
@@ -33,12 +27,16 @@ class CategoryFragment: Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+
+
         categoryAdapter = CategoryAdapter(emptyList())
         binding.rvCategories.layoutManager = GridLayoutManager(requireContext(), 2)
         binding.rvCategories.adapter = categoryAdapter
 
+
         observeViewModel()
         viewModel.fetchCategories()
+
     }
 
     private fun observeViewModel() {
@@ -53,4 +51,5 @@ class CategoryFragment: Fragment() {
            Toast.makeText(requireContext(), "Network error", Toast.LENGTH_SHORT).show()
        }
     }
+
 }
