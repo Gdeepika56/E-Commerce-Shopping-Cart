@@ -7,7 +7,7 @@ import com.bumptech.glide.Glide
 import com.example.ecommerceproject.databinding.ViewHolderCategoryBinding
 import com.example.ecommerceproject.model.CategoryRequest
 
-class CategoryAdapter(private val categories: List<CategoryRequest>) :
+class CategoryAdapter(private var categories: List<CategoryRequest>) :
     RecyclerView.Adapter<CategoryAdapter.CategoryViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CategoryViewHolder {
@@ -22,6 +22,11 @@ class CategoryAdapter(private val categories: List<CategoryRequest>) :
 
     override fun getItemCount(): Int {
         return categories.size
+    }
+
+    fun updateCategories(newCategories: List<CategoryRequest>){
+        categories = newCategories
+        notifyDataSetChanged()
     }
 
     inner class CategoryViewHolder(private val binding: ViewHolderCategoryBinding) :
