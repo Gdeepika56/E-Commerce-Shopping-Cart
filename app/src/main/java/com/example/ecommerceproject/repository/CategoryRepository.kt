@@ -1,17 +1,17 @@
-package com.example.ecommerceproject.model.remote
+package com.example.ecommerceproject.repository
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.example.ecommerceproject.model.CategoryResponse
+import com.example.ecommerceproject.remote.ApiClient
+import com.example.ecommerceproject.remote.ApiService
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
-import retrofit2.Call
-import retrofit2.Callback
 import retrofit2.Response
 
 class CategoryRepository {
 
-    private val apiService: ApiService = ApiClient.retrofit.create(ApiService::class.java)
+    private val apiService: ApiService = ApiClient.apiService
 
     private val _categories = MutableLiveData<CategoryResponse>()
     val categories: LiveData<CategoryResponse> get() = _categories

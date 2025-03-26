@@ -1,14 +1,16 @@
-package com.example.ecommerceproject.model.remote
+package com.example.ecommerceproject.repository
 
 import com.example.ecommerceproject.model.LoginRequest
 import com.example.ecommerceproject.model.LoginResponse
 import com.example.ecommerceproject.model.RegisterRequest
 import com.example.ecommerceproject.model.RegisterResponse
+import com.example.ecommerceproject.remote.ApiClient
+import com.example.ecommerceproject.remote.ApiService
 import retrofit2.Response
 
 class AuthRepository {
 
-    private val apiService: ApiService = ApiClient.retrofit.create(ApiService::class.java)
+    private val apiService: ApiService = ApiClient.apiService
 
 
     suspend fun loginUser(request: LoginRequest): Response<LoginResponse> {
