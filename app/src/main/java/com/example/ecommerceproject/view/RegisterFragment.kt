@@ -7,18 +7,11 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import com.example.ecommerceproject.model.remote.ApiClient
-import com.example.ecommerceproject.model.remote.ApiService
 import com.example.ecommerceproject.R
 import com.example.ecommerceproject.databinding.FragmentRegisterBinding
-import com.example.ecommerceproject.model.RegisterRequest
-import com.example.ecommerceproject.model.RegisterResponse
-import com.example.ecommerceproject.model.remote.AuthRepository
+import com.example.ecommerceproject.repository.AuthRepository
 import com.example.ecommerceproject.viewmodel.AuthViewModel
 import com.example.ecommerceproject.viewmodel.AuthViewModelFactory
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
 
 class RegisterFragment: Fragment() {
     lateinit var binding: FragmentRegisterBinding
@@ -61,7 +54,7 @@ class RegisterFragment: Fragment() {
 
         binding.tvAccount.setOnClickListener{
             parentFragmentManager.beginTransaction()
-                .hide(this)
+//                .hide(this)
                 .replace(R.id.fragment_container, LoginFragment())
                 .addToBackStack(null)
                 .commit()
