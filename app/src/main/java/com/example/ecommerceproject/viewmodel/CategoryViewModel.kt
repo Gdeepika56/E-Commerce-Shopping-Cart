@@ -4,7 +4,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.ecommerceproject.model.CategoryResponse
-import com.example.ecommerceproject.model.remote.CategoryRepository
+import com.example.ecommerceproject.repository.CategoryRepository
 import kotlinx.coroutines.launch
 
 class CategoryViewModel: ViewModel() {

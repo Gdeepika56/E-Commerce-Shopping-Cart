@@ -1,6 +1,5 @@
 package com.example.ecommerceproject.viewmodel
 
-import android.view.View
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -10,7 +9,7 @@ import com.example.ecommerceproject.model.LoginRequest
 import com.example.ecommerceproject.model.LoginResponse
 import com.example.ecommerceproject.model.RegisterRequest
 import com.example.ecommerceproject.model.RegisterResponse
-import com.example.ecommerceproject.model.remote.AuthRepository
+import com.example.ecommerceproject.repository.AuthRepository
 import kotlinx.coroutines.launch
 import retrofit2.Response
 
