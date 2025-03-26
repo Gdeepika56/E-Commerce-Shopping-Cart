@@ -7,7 +7,7 @@ import com.bumptech.glide.Glide
 import com.example.ecommerceproject.databinding.ViewHolderCategoryBinding
 import com.example.ecommerceproject.model.CategoryRequest
 
-class CategoryAdapter(private var categories: List<CategoryRequest>) :
+class CategoryAdapter(private var categories: List<CategoryRequest>, private val onCategoryClick:(CategoryRequest) ->Unit) :
     RecyclerView.Adapter<CategoryAdapter.CategoryViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CategoryViewHolder {
@@ -37,6 +37,7 @@ class CategoryAdapter(private var categories: List<CategoryRequest>) :
             Glide.with(binding.root.context)
                 .load("https://apolisrises.co.in/myshop/images/${category.category_image_url}")
                 .into(binding.ivCategoryImage)
+            binding.root.setOnClickListener { onCategoryClick(category) }
         }
     }
 }
