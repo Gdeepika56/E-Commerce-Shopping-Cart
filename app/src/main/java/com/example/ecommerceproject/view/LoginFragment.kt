@@ -47,8 +47,8 @@ class LoginFragment: Fragment() {
                     authViewModel.loginUser(email,password)
                 }
 
-                binding.tvEmail.text = ""
-                binding.tvPassword.text = ""
+                binding.etEmailId.text.clear()
+                binding.etPassword.text.clear()
             }
         }
 

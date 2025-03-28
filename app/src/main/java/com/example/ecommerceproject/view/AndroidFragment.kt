@@ -1,59 +1,55 @@
 package com.example.ecommerceproject.view
 
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.example.ecommerceproject.Adapters.AndroidAdapter
+import com.example.ecommerceproject.adapters.AndroidAdapter
 import com.example.ecommerceproject.databinding.FragmentAndroidBinding
-import com.example.ecommerceproject.model.Product
-
+import com.example.ecommerceproject.viewmodel.AndroidViewModel
+import com.example.ecommerceproject.repository.ProductRepository
+import com.example.ecommerceproject.remote.ApiResult
+import com.example.ecommerceproject.viewmodel.PhonesViewModelFactory
 
 class AndroidFragment : Fragment() {
 
     private lateinit var binding: FragmentAndroidBinding
-    private var androidList: ArrayList<Product>? = null
-    var categoryDataListener: CategoryDataListener? = null
     private lateinit var adapter: AndroidAdapter
-
-    companion object {
-        fun newInstance(subcategoryId: Int): AndroidFragment {
-            val fragment = AndroidFragment()
-            val args = Bundle()
-            args.putInt("subcategoryId", subcategoryId)
-            fragment.arguments = args
-            return fragment
-        }
-    }
-
+    private val viewModel: AndroidViewModel by viewModels { PhonesViewModelFactory(ProductRepository()) }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
-        binding = FragmentAndroidBinding.inflate(layoutInflater)
+    ): View {
+        binding = FragmentAndroidBinding.inflate(inflater, container, false)
 
         setupRecyclerView()
-        androidList = categoryDataListener?.getAndroidList()
-        androidList?.let { updateData(it) }
+        observeData()
+
+        val subCategoryId = arguments?.getInt("subcategoryId") ?: -1
+        if (subCategoryId != -1) {
+            viewModel.androidAndroidList(subCategoryId)
+        }
 
         return binding.root
     }
 
     private fun setupRecyclerView() {
-        binding.rvAndroid.layoutManager = LinearLayoutManager(requireActivity())
-        binding.rvAndroid.adapter = AndroidAdapter(ArrayList())
-    }
-
-    fun updateData(newList: ArrayList<Product>) {
-        androidList = newList
-        adapter = AndroidAdapter(newList)
+        binding.rvAndroid.layoutManager = LinearLayoutManager(requireContext())
+        adapter = AndroidAdapter(ArrayList())
         binding.rvAndroid.adapter = adapter
     }
 
-    interface CategoryDataListener {
-        fun getAndroidList(): ArrayList<Product>?
+    private fun observeData() {
+        viewModel.apiAndroidResult.observe(viewLifecycleOwner) { result ->
+            when (result) {
+                is ApiResult.Success -> adapter.updateList(result.data.products)
+                is ApiResult.Error -> {}
+                is ApiResult.Loading -> {}
+            }
+        }
     }
 }

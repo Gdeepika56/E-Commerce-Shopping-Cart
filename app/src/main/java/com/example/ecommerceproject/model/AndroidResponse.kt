@@ -6,6 +6,5 @@ class AndroidResponse(
 
     val message: String,
     val products: List<Product>,
-    val data: List<ContactsContract.CommonDataKinds.Phone>,
     val status: Int
 )

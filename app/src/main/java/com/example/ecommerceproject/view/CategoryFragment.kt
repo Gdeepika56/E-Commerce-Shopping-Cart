@@ -13,7 +13,7 @@ import androidx.drawerlayout.widget.DrawerLayout
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.GridLayoutManager
-import com.example.ecommerceproject.Adapters.CategoryAdapter
+import com.example.ecommerceproject.adapters.CategoryAdapter
 import com.example.ecommerceproject.R
 import com.example.ecommerceproject.databinding.FragmentCategoryBinding
 import com.example.ecommerceproject.viewmodel.CategoryViewModel
@@ -34,6 +34,35 @@ class CategoryFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        categoryAdapter = CategoryAdapter(emptyList()) { category ->
+            val bundle = Bundle().apply {
+                putString("category_id", category.category_id)
+                putString("category_name", category.category_name)
+            }
+            val subcategoryFragment = SubcategoryFragment()
+            subcategoryFragment.arguments = bundle
+
+            parentFragmentManager.beginTransaction()
+                .replace(R.id.fragment_container, subcategoryFragment)
+                .addToBackStack(null)
+                .commit()
+        }
+
+        binding.rvCategories.layoutManager = GridLayoutManager(requireContext(), 2)
+        binding.rvCategories.adapter = categoryAdapter
+
+
+        observeViewModel()
+        viewModel.fetchCategories()
+
+    }
+
+    override fun onResume() {
+        super.onResume()
+        setupDrawer()
+    }
+
+    private fun setupDrawer() {
         val drawerLayout = requireActivity().findViewById<DrawerLayout>(R.id.drawer_layout)
         val toolbar = requireActivity().findViewById<Toolbar>(R.id.toolbar)
         val navView = requireActivity().findViewById<NavigationView>(R.id.navView)
@@ -71,28 +100,6 @@ class CategoryFragment : Fragment() {
             drawerLayout.closeDrawers()
             true
         }
-
-        categoryAdapter = CategoryAdapter(emptyList()) { category ->
-            val bundle = Bundle().apply {
-                putString("category_id", category.category_id)
-                putString("category_name", category.category_name)
-            }
-            val subcategoryFragment = SubcategoryFragment()
-            subcategoryFragment.arguments = bundle
-
-            parentFragmentManager.beginTransaction()
-                .replace(R.id.fragment_container, subcategoryFragment)
-                .addToBackStack(null)
-                .commit()
-        }
-
-        binding.rvCategories.layoutManager = GridLayoutManager(requireContext(), 2)
-        binding.rvCategories.adapter = categoryAdapter
-
-
-        observeViewModel()
-        viewModel.fetchCategories()
-
     }
 
     private fun observeViewModel() {
@@ -119,10 +126,10 @@ class CategoryFragment : Fragment() {
 
     private fun navigateToLogin() {
         val loginFragment = LoginFragment()
+        parentFragmentManager.popBackStack(null, androidx.fragment.app.FragmentManager.POP_BACK_STACK_INCLUSIVE)
         parentFragmentManager.beginTransaction()
             .replace(R.id.fragment_container, loginFragment)
             .commit()
-
 
     }
 

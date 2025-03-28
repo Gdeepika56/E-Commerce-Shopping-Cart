@@ -13,7 +13,7 @@ class AndroidViewModel(private val repository: ProductRepository) : ViewModel() 
     val apiAndroidResult: LiveData<ApiResult<AndroidResponse>> = _apiAndroidResult
 
     fun androidAndroidList(subCategoryId: Int) {
-        _apiAndroidResult.postValue(ApiResult.Loading) // Set Loading state
+        _apiAndroidResult.postValue(ApiResult.Loading)
 
         viewModelScope.launch(Dispatchers.IO) {
             try {
