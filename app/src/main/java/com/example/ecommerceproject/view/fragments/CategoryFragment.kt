@@ -1,4 +1,4 @@
-package com.example.ecommerceproject.view
+package com.example.ecommerceproject.view.fragments
 
 
 import android.content.Context
@@ -13,8 +13,8 @@ import androidx.drawerlayout.widget.DrawerLayout
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.GridLayoutManager
-import com.example.ecommerceproject.adapters.CategoryAdapter
 import com.example.ecommerceproject.R
+import com.example.ecommerceproject.adapters.CategoryAdapter
 import com.example.ecommerceproject.databinding.FragmentCategoryBinding
 import com.example.ecommerceproject.viewmodel.CategoryViewModel
 import com.google.android.material.navigation.NavigationView

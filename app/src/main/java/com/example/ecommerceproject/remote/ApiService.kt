@@ -3,10 +3,10 @@ package com.example.ecommerceproject.remote
 
 import com.example.ecommerceproject.model.AndroidResponse
 import com.example.ecommerceproject.model.CategoryResponse
-import com.example.ecommerceproject.model.Details
+
 import com.example.ecommerceproject.model.LoginRequest
 import com.example.ecommerceproject.model.LoginResponse
-import com.example.ecommerceproject.model.Product
+
 import com.example.ecommerceproject.model.RegisterRequest
 import com.example.ecommerceproject.model.RegisterResponse
 import retrofit2.Response
@@ -33,6 +33,6 @@ interface ApiService {
     @Headers("Content-type: application/json")
     suspend fun getProducts(@Path("sub_category_id") subCategoryId: Int): Response<AndroidResponse>
 
-    @GET("Product/details/{product_id}")
-    fun getProductDetails(@Path("product_id") productId: Int): Response<Details>
+//    @GET("Product/details/{product_id}")
+//    fun getProductDetails(@Path("product_id") productId: Int): Response<Details>
 }
