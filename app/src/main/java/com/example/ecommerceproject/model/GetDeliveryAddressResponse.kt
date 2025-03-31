@@ -2,13 +2,11 @@ package com.example.ecommerceproject.model
 
 import com.google.gson.annotations.SerializedName
 
-data class LoginResponse(
+data class GetDeliveryAddressResponse (
     @SerializedName("status")
     val status: Int,
-
     @SerializedName("message")
     val message: String,
-
-    @SerializedName("user")
-    val user: User?
+    @SerializedName("addresses")
+    val addresses: List<Address>
 )

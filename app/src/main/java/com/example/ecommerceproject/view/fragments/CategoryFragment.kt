@@ -81,10 +81,18 @@ class CategoryFragment : Fragment() {
         navView.setNavigationItemSelectedListener { menuItem ->
             when (menuItem.itemId) {
                 R.id.home -> {
-                    Toast.makeText(requireContext(), "Home Clicked", Toast.LENGTH_SHORT).show()
+                    requireActivity().supportFragmentManager.beginTransaction()
+                        .replace(R.id.drawer_layout, CategoryFragment())
+                        .commit()
+//                    Toast.makeText(requireContext(), "Home Clicked", Toast.LENGTH_SHORT).show()
                 }
                 R.id.cart -> {
-                    Toast.makeText(requireContext(), "Cart Clicked", Toast.LENGTH_SHORT).show()
+                    requireActivity().supportFragmentManager.beginTransaction()
+                        .replace(R.id.CategoryframeLayout, CartFragment())
+                        .addToBackStack("CartFragment")
+                        .commit()
+
+//                    Toast.makeText(requireContext(), "Cart Clicked", Toast.LENGTH_SHORT).show()
                 }
                 R.id.orders -> {
                     Toast.makeText(requireContext(), "Orders Clicked", Toast.LENGTH_SHORT).show()

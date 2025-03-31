@@ -1,9 +1,8 @@
 package com.example.ecommerceproject.model
 
 
-class AndroidResponse(
-
+data class ProductDetails(
     val message: String,
-    val products: List<Product>,
+    val product: ProductDetailsbyId,
     val status: Int
 )

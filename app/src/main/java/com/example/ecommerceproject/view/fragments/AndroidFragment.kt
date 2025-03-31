@@ -1,7 +1,6 @@
 package com.example.ecommerceproject.view.fragments
 
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -9,9 +8,11 @@ import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.example.ecommerceproject.R
 import com.example.ecommerceproject.adapters.AndroidAdapter
 import com.example.ecommerceproject.databinding.FragmentAndroidBinding
 import com.example.ecommerceproject.model.Product
+import com.example.ecommerceproject.remote.ApiClient
 import com.example.ecommerceproject.viewmodel.AndroidViewModel
 import com.example.ecommerceproject.repository.ProductRepository
 import com.example.ecommerceproject.remote.ApiResult
@@ -22,7 +23,8 @@ class AndroidFragment : Fragment() {
     private var _binding: FragmentAndroidBinding? = null
     private val binding get() = _binding!!
     private lateinit var adapter: AndroidAdapter
-    private val viewModel: AndroidViewModel by viewModels { PhonesViewModelFactory(ProductRepository()) }
+    private val viewModel: AndroidViewModel by viewModels { PhonesViewModelFactory(ProductRepository(
+        ApiClient.apiService))}
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -30,19 +32,6 @@ class AndroidFragment : Fragment() {
     ): View {
         _binding = FragmentAndroidBinding.inflate(inflater, container, false)
         return binding.root
-//        setupRecyclerView()
-////        observeData()
-//
-//        val subCategoryId = arguments?.getInt("subcategoryId", -1) ?: -1
-//        Log.d("AndroidFragment", "SubCategoryId: $subCategoryId") // Debugging
-//
-//        if (subCategoryId != -1) {
-//            viewModel.androidAndroidList(subCategoryId)
-//        } else {
-//            Log.e("AndroidFragment", "Invalid subcategoryId received!")
-//        }
-
-
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -58,7 +47,20 @@ class AndroidFragment : Fragment() {
         binding.rvAndroid.layoutManager = LinearLayoutManager(requireContext())
         adapter = AndroidAdapter(ArrayList())
         binding.rvAndroid.adapter = adapter
+
+        adapter.setOnItemClickListener { productId ->
+            val fragment = ProductDetailsFragment().apply {
+                arguments = Bundle().apply {
+                    putString("productId", productId)
+                }
+            }
+            parentFragmentManager.beginTransaction()
+                .replace(R.id.Container2, fragment)
+                .addToBackStack(null)
+                .commit()
+        }
     }
+
 
     private fun fetchProducts(subCategoryId: Int) {
         viewModel.androidAndroidList(subCategoryId)

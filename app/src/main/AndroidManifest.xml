@@ -15,6 +15,9 @@
         android:theme="@style/Theme.EcommerceProject"
         tools:targetApi="31">
         <activity
+            android:name=".view.activities.ProductDetailsActivity"
+            android:exported="false" />
+        <activity
             android:name=".view.activities.SplashActivity"
             android:exported="true">
             <intent-filter>
@@ -26,11 +29,13 @@
         <activity
             android:name=".view.activities.MainActivity"
             android:exported="true">
-<!--            <intent-filter>-->
-<!--                <action android:name="android.intent.action.MAIN" />-->
 
-<!--                <category android:name="android.intent.category.LAUNCHER" />-->
-<!--            </intent-filter>-->
+            <!-- <intent-filter> -->
+            <!-- <action android:name="android.intent.action.MAIN" /> -->
+
+
+            <!-- <category android:name="android.intent.category.LAUNCHER" /> -->
+            <!-- </intent-filter> -->
         </activity>
     </application>
 
